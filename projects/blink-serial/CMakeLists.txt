@@ -26,5 +26,16 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         )
 
+# Add arduino core library
+target_include_directories(${PROJECT_NAME} PRIVATE
+        "${ARDUINO_PATH}/include/arduino"
+        )
+target_link_directories(${PROJECT_NAME} PRIVATE
+        "${ARDUINO_PATH}/lib"
+        )
+target_link_libraries(${PROJECT_NAME}
+        ArduinoCore
+        )
+
 # Rename the output to .elf as we will create multiple files
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME}.elf)
