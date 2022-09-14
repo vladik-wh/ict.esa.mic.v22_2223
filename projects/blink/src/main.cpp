@@ -105,3 +105,52 @@ int main(void)
         _delay_ms(1000);		// wait a while
     }
 }
+
+/*
+ 1-6  Verken de datasheet van de ATmega328
+
+ Hoeveel machineinstructies kent de AVR ATMega328?
+ 124 op basis van de instruction set manual
+
+ Welke features ondersteunt de ATMega328?
+ Ligt aan de definitie van features
+ Kijkend naar de peripheral features op de voorpagina:
+ - 2 8-bit timer
+ - 1 16-bit timer
+ - real time counter
+ - 6 pwm channels
+ - 10-bit ADC
+ - USART
+ - SPI
+ - 2-wire serial interface
+ - watchdog timer
+ - analog comparator
+ - interrupt and wake-up on pin change
+
+ Binnen welke temperatuur range werkt de ATMega328?
+ -40 tot 125 degrees celsius
+
+ Welke alternatieve functies heeft pin PB4?
+ MISO (SPI bus master output/slave input)
+ PCINT4 (pin change interrupt 4)
+
+ Wat betekent bit 2 (N) in het Status register?
+ Dat is de negative flag. Dat geeft aan dat het resultaat in een arithmische operatie negatief is.
+
+ Wat betekent bit 3 (EESAVE) in het high fuse byte?
+ Als het 1 is, dan wordt de EEPROM geheugen niet gehouden na een chip erase (standaard is de waarde 1).
+
+ Op welk geheugenadres bevindt zich het PORTC register in het data geheugen?
+ 0x28 (0x08 relatief)
+
+ Op welk geheugenadres bevindt zich de INT1 interrupt in het programmageheugen?
+ 0x3D (bit 1)
+
+ Wat doet 'PUD' in figuur 18.2 general Digital I/O?
+ Het woord PUD komt niet voor in figure 18-2 Counter Unit Block Diagram.
+ PUD staat voor Pull Up Disable. Dit zou de pull-up functie uitschakelen van iets.
+
+ In welk register staat dit bit op welke plek?
+ MCUCR register op adres 0x35 (0x55 absoluut) bit nummer 4
+
+ */
