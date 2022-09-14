@@ -3,14 +3,14 @@ cmake_minimum_required(VERSION 3.18)
 
 # Determine the Arduino path, with all Arduino related libraries and generic cmake stuff
 if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
-#    set(ARDUINO_PATH $ENV{HOME}/Arduino)
+    #    set(ARDUINO_PATH $ENV{HOME}/Arduino)
     set(AVR_PORT /dev/ttyACM0)
 elseif(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-#    set(ARDUINO_PATH "$ENV{HOMEDRIVE}$ENV{HOMEPATH}/Arduino")
+    #    set(ARDUINO_PATH "$ENV{HOMEDRIVE}$ENV{HOMEPATH}/Arduino")
     set(AVR_PORT COM6)
 endif()
 
-set(ARDUINO_PATH ./arduino)
+set(ARDUINO_PATH ../../arduino)
 
 # the toolchain to use
 set(CMAKE_TOOLCHAIN_FILE ${ARDUINO_PATH}/etc/toolchain-avr.cmake)
@@ -19,7 +19,7 @@ set(CMAKE_TOOLCHAIN_FILE ${ARDUINO_PATH}/etc/toolchain-avr.cmake)
 set(CMAKE_PROJECT_INCLUDE ${ARDUINO_PATH}/etc/extratargets-avr.cmake)
 
 # Project name (also the name of the target)
-project(blink)
+project(blink_serial)
 
 # Create one target. To generate a list of source files: `find src -name \*.c\*`
 add_executable(${PROJECT_NAME}
