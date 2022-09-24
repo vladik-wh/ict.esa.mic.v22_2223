@@ -1,15 +1,21 @@
 #include <avr/io.h>
+
+//#define EXTERNAL_DEBOUNCING
+//#define EXTERNAL_PULL_UP_RESISTOR
+#ifndef EXTERNAL_DEBOUNCING
 #include <util/delay.h>
 
-#define COUNTER_MASK 0x0F
 #define DEBOUNCE_TIME_MS 50
+#endif
+
+#define COUNTER_MASK 0x0F
 
 /**
  * Button state.
  */
 enum bstate {
-    pressed = 0,
-    released = 1,
+    pressed,
+    released,
 };
 
 /**
@@ -31,7 +37,9 @@ enum bstate button_state() {
     if (pin == state)
         return static_cast<bstate>(state);
 
+#ifndef EXTERNAL_DEBOUNCING
     _delay_ms(DEBOUNCE_TIME_MS);
+#endif
     state = PIND & (1 << PIND2);
 
     return static_cast<bstate>(state);
@@ -51,8 +59,10 @@ void init_pins() {
     // Set button pin to input
 //    DDRD &= ~(1 << DDD2); // input by default
 
+#ifndef EXTERNAL_PULL_UP_RESISTOR
     // Set button pin to pull-up
-    PORTD |= (1 << PORTD2);
+    PORTD |= (1 << PORTD2); // Uncomment this line if there is no external pull-up resistor
+#endif
 }
 
 /**
