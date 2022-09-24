@@ -25,29 +25,21 @@ void display_counter(uint8_t counter) {
  * @return bstate State of the button.
  */
 enum bstate button_state() {
-    // Pin should start high
     static bool state{true};
-
-    // Store the pin status
     bool pin = PIND & (1 << PIND2);
 
-    // Pin is high just as the previous high state
     if (pin && state)
         return bstate::released;
 
-    // Pin is low just as the previous low state
     if (!pin && !state)
         return bstate::pressed;
 
-    // Wait for debounce and set the state
     _delay_ms(DEBOUNCE_TIME_MS);
     state = PIND & (1 << PIND2);
 
-    // Return released if the state is high
     if (state)
         return bstate::released;
 
-    // Return pressed if the state is low
     return bstate::pressed;
 }
 
@@ -76,16 +68,13 @@ void init_pins() {
 bool vehicle_passed() {
     static bool state{false};
 
-    // If previously not pressed and the button is pressed, store the pressed state
     if (!state && button_state() == bstate::pressed)
         state = true;
-        // If previously pressed and the button is released, store the released state and return true
     else if (state && button_state() == bstate::released) {
         state = false;
         return true;
     }
 
-    // In all other cases return false
     return false;
 }
 
@@ -99,7 +88,7 @@ int main() {
         if (vehicle_passed())
             counter++;
 
-        /*/ Comment this line to enable the counter reset according to design
+        /*/ Counter reset according to design
         if (counter > COUNTER_MASK)
             counter = 0;
         /*/
