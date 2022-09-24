@@ -1,17 +1,29 @@
 #include <avr/io.h>
-#include <HardwareSerial.h>
-#include <util/atomic.h>
 #include <util/delay.h>
 
+#define COUNTER_MASK 0x0F
+#define DEBOUNCE_TIME_MS 50
+
+/**
+ * Button state.
+ */
 enum bstate {
     pressed,
     released,
 };
 
+/**
+ * Displays a number ranging 0 < counter < 15 on the 4-bit LED display.
+ * @param counter Number to represent on the display.
+ */
 void display_counter(uint8_t counter) {
-    PORTC = (counter & 0x0F) | (PORTC & 0xF0);
+    PORTC = (counter & COUNTER_MASK) | (PORTC & ~COUNTER_MASK);
 }
 
+/**
+ * Gets the button of the PIND2 register (digital pin 2).
+ * @return bstate State of the button.
+ */
 enum bstate button_state() {
     // Pin should start high
     static bool state{true};
@@ -28,7 +40,7 @@ enum bstate button_state() {
         return bstate::pressed;
 
     // Wait for debounce and set the state
-    _delay_ms(50);
+    _delay_ms(DEBOUNCE_TIME_MS);
     state = PIND & (1 << PIND2);
 
     // Return released if the state is high
@@ -39,6 +51,13 @@ enum bstate button_state() {
     return bstate::pressed;
 }
 
+/**
+ * Initializes the pins.
+ * <br><br>
+ * Sets the DDC0, DDC1, DDC2, DDC3 to output for the 4-bit LED display (analog input pins 0-3).
+ * <br><br>
+ * Sets the PORTD2 pin to pull-up mode for the button.
+ */
 void init_pins() {
     // Set LED pins to output
     DDRC |= (1 << DDC0) | (1 << DDC1) | (1 << DDC2) | (1 << DDC3);
@@ -48,30 +67,46 @@ void init_pins() {
 
     // Set button pin to pull-up
     PORTD |= (1 << PORTD2);
-
-    sei();
 }
 
+/**
+ * Returns true when a "vehicle passes".
+ * @return <code>true</code> if the button has been released, otherwise false.
+ */
 bool vehicle_passed() {
     static bool state{false};
 
+    // If previously not pressed and the button is pressed, store the pressed state
+    if (!state && button_state() == bstate::pressed)
+        state = true;
+        // If previously pressed and the button is released, store the released state and return true
+    else if (state && button_state() == bstate::released) {
+        state = false;
+        return true;
+    }
+
+    // In all other cases return false
     return false;
 }
 
 int main() {
     init_pins();
-    Serial.begin(9600);
     uint8_t counter = 0;
 
-    bool state{false};
-
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EndlessLoop"
     while (true) {
-        if (!state && button_state() == bstate::pressed) {
-            Serial.println("pressed");
-            state = true;
-        } else if (state && button_state() == bstate::released) {
-            Serial.println("released");
-            state = false;
-        }
+        if (vehicle_passed())
+            counter++;
+
+        /*/ Comment this line to enable the counter reset according to design
+        if (counter > COUNTER_MASK)
+            counter = 0;
+        /*/
+        counter &= COUNTER_MASK;
+        //*/
+
+        display_counter(counter);
     }
+#pragma clang diagnostic pop
 }
