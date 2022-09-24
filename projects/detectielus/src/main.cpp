@@ -71,7 +71,7 @@ void init_pins() {
 
 /**
  * Returns true when a "vehicle passes".
- * @return <code>true</code> if the button has been released, otherwise false.
+ * @return <code>true</code> if the button has been released, otherwise <code>false</code>.
  */
 bool vehicle_passed() {
     static bool state{false};
