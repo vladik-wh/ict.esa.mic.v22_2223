@@ -80,7 +80,7 @@ bool vehicle_passed() {
 
 int main() {
     init_pins();
-    uint8_t counter = 0;
+    uint8_t counter {0};
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
