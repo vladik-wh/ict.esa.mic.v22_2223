@@ -8,8 +8,8 @@
  * Button state.
  */
 enum bstate {
-    pressed,
-    released,
+    pressed = 0,
+    released = 1,
 };
 
 /**
@@ -28,19 +28,13 @@ enum bstate button_state() {
     static bool state{true};
     bool pin = PIND & (1 << PIND2);
 
-    if (pin && state)
-        return bstate::released;
-
-    if (!pin && !state)
-        return bstate::pressed;
+    if (pin == state)
+        return static_cast<bstate>(state);
 
     _delay_ms(DEBOUNCE_TIME_MS);
     state = PIND & (1 << PIND2);
 
-    if (state)
-        return bstate::released;
-
-    return bstate::pressed;
+    return static_cast<bstate>(state);
 }
 
 /**
@@ -68,11 +62,13 @@ void init_pins() {
 bool vehicle_passed() {
     static bool state{false};
 
-    if (!state && button_state() == bstate::pressed)
+    if (state) {
+        if (button_state() == bstate::released) {
+            state = false;
+            return true;
+        }
+    } else if (button_state() == bstate::pressed) {
         state = true;
-    else if (state && button_state() == bstate::released) {
-        state = false;
-        return true;
     }
 
     return false;
@@ -80,7 +76,7 @@ bool vehicle_passed() {
 
 int main() {
     init_pins();
-    uint8_t counter {0};
+    uint8_t counter{0};
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
