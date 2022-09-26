@@ -2,7 +2,7 @@
 #include <util/delay.h>
 
 #define LED_COUNT 6
-///*/
+/*/
 #define DELAY_US 100000
 /*/
 #define DELAY_US 3125
