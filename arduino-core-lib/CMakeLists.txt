@@ -54,6 +54,8 @@ add_library(${PROJECT_NAME} STATIC
         src/cores/arduino/wiring_shift.c
         src/cores/arduino/WMath.cpp
         src/cores/arduino/WString.cpp
+        src/libraries/Wire/src/Wire.cpp
+        src/libraries/Wire/src/utility/twi.c
         )
 
 # Here the compiler finds include files (-I flags)
@@ -89,6 +91,8 @@ set(INCLUDES
         src/cores/arduino/WCharacter.h
         src/cores/arduino/wiring_private.h
         src/cores/arduino/WString.h
+        src/includes/
+        src/libraries/Wire/src/Wire.h
         )
 
 # Install the library here (INSTALL_PREFIX_PATH is prepended)
