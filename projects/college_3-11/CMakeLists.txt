@@ -33,7 +33,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 target_link_directories(${PROJECT_NAME} PRIVATE
         "${ARDUINO_PATH}/lib"
         )
+
 target_link_libraries(${PROJECT_NAME}
+        Wire
         ArduinoCore
         )
 
