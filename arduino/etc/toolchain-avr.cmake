@@ -50,7 +50,7 @@ add_definitions(
 add_compile_options(
     -mmcu=${MCU} # MCU
     -MMD
-    -Os # optimize
+    -O3 # optimize
     -g
     -ffunction-sections
     -fdata-sections
