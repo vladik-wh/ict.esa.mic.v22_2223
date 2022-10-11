@@ -24,11 +24,11 @@ int main() {
 
     PORTD |= (1 << PORTD2);
     EICRA |= (1 << ISC01) | (1 << ISC00);
-    EIFR |= (1 << INTF0);
     EIMSK |= (1 << INT0);
 
     DDRB |= (1 << DDB5);
 
+    EIFR |= (1 << INTF0);
     sei();
 
 #pragma clang diagnostic push
