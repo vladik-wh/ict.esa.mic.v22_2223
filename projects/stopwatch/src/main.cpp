@@ -5,7 +5,7 @@
 #define OUTPUT_COMPARE_INTERRUPT_CYCLES 2
 #define OUTPUT_COMPARE_REGISTER_A_VALUE 234
 
-volatile static bool button_status{false};
+static bool button_status{false};
 
 /**
  * Interrupt 0 Vector
@@ -44,12 +44,6 @@ ISR(TIMER0_COMPA_vect) {
 
     count = 0;
 
-    if (PIND & (1 << PIND2)) {
-        if (button_status)
-            button_status = false;
-    } else if (!button_status)
-        button_status = true;
-
     EIMSK |= (1 << INT0); // Enable interrupt 0
     TIMSK0 &= ~(1 << OCIE0A); // Disable the timer 1 compare A interrupt
 }
@@ -75,14 +69,21 @@ int main() {
     Serial.println("start");
     Serial.flush();
 
+    static bool previous_state{button_status};
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
     // "Superloop"
     while (true) {
-        if (button_status)
+        if (button_status) {
             PORTB |= (1 << PORTB5);
-        else
+        } else
             PORTB &= ~(1 << PORTB5);
+
+        if (previous_state != button_status) {
+            previous_state = button_status;
+            Serial.println(button_status);
+            Serial.flush();
+        }
     }
 #pragma clang diagnostic pop
 }
