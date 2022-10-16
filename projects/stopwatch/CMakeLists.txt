@@ -23,7 +23,7 @@ project(stopwatch)
 
 # Create one target. To generate a list of source files: `find src -name \*.c\*`
 add_executable(${PROJECT_NAME}
-        src/main.cpp
+        src/stopwatch.cpp
         )
 
 # Add arduino core library
