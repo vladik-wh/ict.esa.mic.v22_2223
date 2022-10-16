@@ -454,7 +454,7 @@ void init_centibeat_timer() {
     // Disable the timer 1 overflow compare A interrupt (disabled by default)
 //    TIMSK1 &= ~(1 << OCIE1A);
     // Set the timer 1 compare register A to 0.864 seconds
-    OCR1A = 13499;
+    OCR1A = centibeat_compare_value;
 }
 
 void start_centibeat_timer() {
