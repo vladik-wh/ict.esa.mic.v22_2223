@@ -1,3 +1,16 @@
+/**
+ * @file stopwatch.cpp
+ * @brief Internet Time Stopwatch
+ *
+ * An internet time stopwatch that displays centibeats in hexadecimal on a
+ * 7-segment display. When the button is pressed, then the timer will start
+ * from 0. When the button is released, then the timer will stop. A centibeat is
+ * 0.864 seconds.
+ *
+ * @author Vladik Packo
+ * Contact: s1160265&#64;student.windesheim.nl
+ */
+
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <Wire.h>
