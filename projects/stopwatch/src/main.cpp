@@ -316,9 +316,11 @@ int main() {
 #pragma region Button
 
 void init_button() {
-//    DDRD &= ~(DDD2); // Set digital pin 2 (PD2/INT0) to input mode (is input by default)
+    // Set digital pin 2 (PD2/INT0) to input mode (is input by default)
+//    DDRD &= ~(DDD2);
     PORTD |= (1 << PORTD2); // Set digital pin 2  (PD2/INT0) to pull-up mode
-//    EIMSK &= ~(1 << INT0); // Disable external interrupt 0 (is disabled by default)
+    // Disable external interrupt 0 (is disabled by default)
+//    EIMSK &= ~(1 << INT0);
     EICRA |= (1 << ISC00); // Set interrupt 0 to trigger on logical change
 }
 
@@ -385,7 +387,7 @@ void init_debounce_timer() {
      */
     static constexpr uint8_t debounce_compare_value = 124;
 
-    TCCR0A = (1 << WGM01); // Set timer 0 to clear timer on compare (CTC) mode
+    TCCR0A |= (1 << WGM01); // Set timer 0 to clear timer on compare (CTC) mode
     // Disable the timer 0 overflow compare A interrupt (disabled by default)
 //    TIMSK0 &= ~(1 << OCIE0A);
     // Set the timer 0 compare register A to 0.2 ms
@@ -401,7 +403,7 @@ void start_debounce_timer() {
 
 void stop_debounce_timer() {
     TIMSK0 &= ~(1 << OCIE0A); // Disable the timer 0 compare A interrupt
-    TCCR0B = 0; // Stop timer 0
+    TCCR0B &= ~((1 << CS02) | (1 << CS01) | (1 << CS00)); // Stop timer 0
 }
 
 void debounce_timer_interrupt_handler() {
@@ -448,11 +450,11 @@ void init_centibeat_timer() {
      */
     static constexpr uint16_t centibeat_compare_value = 13499;
 
-    TCCR1B = (1 << WGM12);  // Set timer 1 to clear timer on compare (CTC) mode
+    TCCR1B |= (1 << WGM12);  // Set timer 1 to clear timer on compare (CTC) mode
     // Disable the timer 1 overflow compare A interrupt (disabled by default)
 //    TIMSK1 &= ~(1 << OCIE1A);
     // Set the timer 1 compare register A to 0.864 seconds
-    OCR1A = centibeat_compare_value;
+    OCR1A = 13499;
 }
 
 void start_centibeat_timer() {
@@ -463,7 +465,7 @@ void start_centibeat_timer() {
 
 void stop_centibeat_timer() {
     TIMSK1 &= ~(1 << OCIE1A); // Disable the timer 1 compare A interrupt
-    TCCR1B = 0; // Stop timer 1
+    TCCR1B &= ~((1 << CS12) | (1 << CS11) | (1 << CS10)); // Stop timer 1
 }
 
 void centibeat_timer_interrupt_handler() {
