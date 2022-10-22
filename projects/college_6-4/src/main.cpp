@@ -4,7 +4,7 @@
 #define SIGRD 5
 #include <avr/boot.h>
 
-volatile uint8_t adc_value{0};
+volatile uint16_t adc_value{0};
 volatile bool sample_ready{false};
 
 int main() {
